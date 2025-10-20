@@ -608,8 +608,8 @@
         .ai-button {
             width: 100%;
             padding: 18px;
-            background: linear-gradient(135deg, #3498DB, #2980B9);
-            border: 2px solid #D4AF37;
+            background: linear-gradient(135deg, #8E44AD, #D4AF37);
+            border: 2px solid #FFD700;
             border-radius: 12px;
             color: white;
             font-size: 1.3em;
@@ -622,12 +622,13 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .ai-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(52, 152, 219, 0.6);
-            background: linear-gradient(135deg, #5DADE2, #3498DB);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.6);
+            background: linear-gradient(135deg, #9B59B6, #FFD700);
         }
 
         .ai-button::before {
@@ -1137,7 +1138,7 @@
         }
 
         function initializeAIButton() {
-            document.getElementById('aiButton').addEventListener('click', () => {
+            document.getElementById('aiButton').addEventListener('click', async () => {
                 if (drawnCards.length === 0) {
                     alert('请先抽牌！');
                     return;
@@ -1164,20 +1165,23 @@
 
                 readingInfo += `\n\n请作为一位经验丰富的塔罗师，为我提供深入、详细的综合解读。请结合所有牌的含义、位置和我的问题，给出有洞察力的分析和建议。`;
 
-                // 构建豆包对话URL
-                const prompt = encodeURIComponent(readingInfo);
-                const doubaoUrl = `https://www.doubao.com/chat/?q=${prompt}`;
-
-                // 在新窗口打开豆包
+                // 复制提示词到剪贴板
                 try {
+                    await navigator.clipboard.writeText(readingInfo);
+
+                    // 打开豆包网站
+                    const doubaoUrl = 'https://www.doubao.com/chat/';
                     window.open(doubaoUrl, '_blank');
 
                     // 显示提示
                     setTimeout(() => {
-                        alert('已在新标签页中打开豆包AI！\n\n豆包将为您提供更深入的塔罗牌解读。\n请在新窗口中查看AI的详细分析。');
+                        alert('✅ 提示词已复制到剪贴板！\n\n已在新标签页中打开豆包AI。\n请在豆包对话框中粘贴（Ctrl+V 或 Cmd+V）提示词，AI将为您提供深入的塔罗牌解读。');
                     }, 500);
                 } catch (e) {
-                    alert('无法打开浏览器：' + e.message);
+                    // 如果复制失败，提供备用方案
+                    alert('提示词复制失败，请手动复制以下内容：\n\n' + readingInfo);
+                    // 仍然尝试打开豆包
+                    window.open('https://www.doubao.com/chat/', '_blank');
                 }
             });
         }

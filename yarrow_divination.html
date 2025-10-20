@@ -314,6 +314,34 @@
             margin-bottom: 10px;
         }
 
+        .ai-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #d4af37 0%, #c9a961 100%);
+            border: 2px solid #d4af37;
+            border-radius: 10px;
+            color: #1a1a2e;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 4px;
+            margin-top: 20px;
+            display: block;
+            font-family: 'SimSun', 'STSong', serif;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .ai-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.5);
+            background: linear-gradient(135deg, #FFD700 0%, #d4af37 100%);
+        }
+
+        .ai-button::before {
+            content: '🤖 ';
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -1280,10 +1308,86 @@
             resultDiv.innerHTML = interpretationHTML;
             divinationArea.appendChild(resultDiv);
 
+            // 添加AI分析按钮
+            const aiButton = document.createElement('button');
+            aiButton.className = 'ai-button';
+            aiButton.textContent = 'AI 深度解读';
+            aiButton.style.display = 'block';
+            aiButton.onclick = handleAIAnalysis;
+            divinationArea.appendChild(aiButton);
+
             startBtn.disabled = false;
             progressBar.style.display = 'none';
             progressFill.style.width = '0%';
         });
+
+        // AI分析处理函数
+        async function handleAIAnalysis() {
+            const question = questionInput.value.trim();
+            const interpretation = divination.getInterpretation();
+            const changingLines = divination.getChangingLines();
+
+            // 构建详细的占卜信息
+            let readingInfo = `我正在使用大衍之数蓍草占卜法进行周易占卜，我的问题是：${question}\n\n`;
+            readingInfo += `占卜结果：\n`;
+            readingInfo += `本卦：${interpretation.original.name}卦\n`;
+            readingInfo += `卦辞：${interpretation.original.text || interpretation.original.description}\n\n`;
+
+            // 添加动爻信息
+            if (interpretation.changingCount > 0) {
+                readingInfo += `动爻情况：\n`;
+                readingInfo += `共有${interpretation.changingCount}个动爻，分别是：`;
+                changingLines.forEach(lineIdx => {
+                    readingInfo += `第${lineIdx + 1}爻、`;
+                });
+                readingInfo = readingInfo.slice(0, -1) + '\n\n';
+
+                if (interpretation.changed) {
+                    readingInfo += `之卦（变卦）：${interpretation.changed.name}卦\n`;
+                    readingInfo += `变卦卦辞：${interpretation.changed.text || interpretation.changed.description}\n\n`;
+                }
+            } else {
+                readingInfo += `动爻情况：六爻安静，无动爻\n\n`;
+            }
+
+            readingInfo += `断卦方法：${interpretation.method}\n\n`;
+
+            // 添加六爻详情
+            readingInfo += `六爻详情（自下而上）：\n`;
+            divination.lines.forEach((line, idx) => {
+                readingInfo += `第${idx + 1}爻：${line.line.name}`;
+                if (line.line.changing) {
+                    readingInfo += `（动爻）`;
+                }
+                readingInfo += `\n`;
+            });
+
+            readingInfo += `\n\n请作为一位精通周易的大师，根据以上占卜结果，结合我的问题，为我提供深入、详细的解读和分析。请从以下几个方面进行解读：\n`;
+            readingInfo += `1. 卦象含义：解释本卦和变卦（如有）的基本含义\n`;
+            readingInfo += `2. 当前状况：根据卦象分析我当前所处的状态\n`;
+            readingInfo += `3. 发展趋势：预测未来可能的发展方向\n`;
+            readingInfo += `4. 行动建议：给出具体的建议和注意事项\n`;
+            readingInfo += `5. 综合解读：整合所有信息，给出全面的分析`;
+
+            // 复制提示词到剪贴板
+            try {
+                await navigator.clipboard.writeText(readingInfo);
+
+                // 打开豆包网站
+                const doubaoUrl = 'https://www.doubao.com/chat/';
+                window.open(doubaoUrl, '_blank');
+
+                // 显示提示
+                setTimeout(() => {
+                    alert('✅ 提示词已复制到剪贴板！\n\n已在新标签页中打开豆包AI。\n请在豆包对话框中粘贴（Ctrl+V 或 Cmd+V）提示词，AI将为您提供深入的周易解读。');
+                }, 500);
+            } catch (e) {
+                // 如果复制失败，提供备用方案
+                alert('提示词复制失败，请手动复制以下内容：\n\n' + readingInfo);
+                // 仍然尝试打开豆包
+                window.open('https://www.doubao.com/chat/', '_blank');
+            }
+        }
     </script>
 </body>
 </html>
