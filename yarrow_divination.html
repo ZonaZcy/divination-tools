@@ -809,6 +809,18 @@
         }
 
         function initHexagrams() {
+            // 64卦顺序映射
+            const hexOrder = {
+                '111111': 1, '000000': 2, '100010': 3, '010001': 4, '111010': 5, '010111': 6, '010000': 7, '000010': 8,
+                '111011': 9, '110111': 10, '111000': 11, '000111': 12, '101111': 13, '111101': 14, '001000': 15, '000100': 16,
+                '100110': 17, '011001': 18, '110000': 19, '000011': 20, '100101': 21, '101001': 22, '000001': 23, '100000': 24,
+                '100111': 25, '111001': 26, '100001': 27, '011110': 28, '010010': 29, '101101': 30, '001110': 31, '011100': 32,
+                '001111': 33, '111100': 34, '000101': 35, '101000': 36, '101011': 37, '110101': 38, '001010': 39, '010100': 40,
+                '110001': 41, '100011': 42, '111110': 43, '011111': 44, '000110': 45, '011000': 46, '010110': 47, '011010': 48,
+                '101110': 49, '011101': 50, '100100': 51, '001001': 52, '001011': 53, '110100': 54, '101100': 55, '001101': 56,
+                '011011': 57, '110110': 58, '010011': 59, '110010': 60, '110011': 61, '001100': 62, '101010': 63, '010101': 64
+            };
+
             // 从 JSON 数据中构建卦象字典
             const hexIndexGroup = zhouyiData.g.find(g => g.t === "Hexagram Index");
             const hexNameGroup = zhouyiData.g.find(g => g.t === "Hexagram Name");
@@ -848,6 +860,7 @@
                     xiang: xiang,
                     tuan: tuan,
                     lines: lines,
+                    index: hexOrder[binary] || 0,
                     description: text ? `${text}` : ''
                 };
             });
@@ -877,70 +890,70 @@
             };
 
             hexagrams = {
-                '111111': { name: '乾', chinese: '乾', description: '元亨利贞。刚健中正，自强不息。', text: '元亨利贞', lines: addLines('111111') },
-                '000000': { name: '坤', chinese: '坤', description: '元亨，利牝马之贞。柔顺承载，厚德载物。', text: '元亨利牝马之贞', lines: addLines('000000') },
-                '100010': { name: '屯', chinese: '屯', description: '元亨利贞，勿用有攸往，利建侯。', text: '元亨利贞勿用有攸往利建侯', lines: addLines('100010') },
-                '010001': { name: '蒙', chinese: '蒙', description: '亨。匪我求童蒙，童蒙求我。', text: '亨匪我求童蒙童蒙求我', lines: addLines('010001') },
-                '111010': { name: '需', chinese: '需', description: '有孚，光亨，贞吉，利涉大川。', text: '有孚光亨贞吉利涉大川', lines: addLines('111010') },
-                '010111': { name: '讼', chinese: '讼', description: '有孚，窒惕，中吉，终凶。', text: '有孚窒惕中吉终凶', lines: addLines('010111') },
-                '010000': { name: '师', chinese: '师', description: '贞，丈人吉，无咎。', text: '贞丈人吉无咎', lines: addLines('010000') },
-                '000010': { name: '比', chinese: '比', description: '吉。原筮，元永贞，无咎。', text: '吉原筮元永贞无咎', lines: addLines('000010') },
-                '111011': { name: '小畜', chinese: '小畜', description: '亨。密云不雨。', text: '亨密云不雨自我西郊', lines: addLines('111011') },
-                '110111': { name: '履', chinese: '履', description: '履虎尾，不咥人，亨。', text: '履虎尾不咥人亨', lines: addLines('110111') },
-                '111000': { name: '泰', chinese: '泰', description: '小往大来，吉亨。', text: '小往大来吉亨', lines: addLines('111000') },
-                '000111': { name: '否', chinese: '否', description: '否之匪人，不利君子贞。', text: '否之匪人不利君子贞大往小来', lines: addLines('000111') },
-                '101111': { name: '同人', chinese: '同人', description: '同人于野，亨。', text: '同人于野亨利涉大川利君子贞', lines: addLines('101111') },
-                '111101': { name: '大有', chinese: '大有', description: '元亨。', text: '元亨', lines: addLines('111101') },
-                '001000': { name: '谦', chinese: '谦', description: '亨，君子有终。', text: '亨君子有终', lines: addLines('001000') },
-                '000100': { name: '豫', chinese: '豫', description: '利建侯行师。', text: '利建侯行师', lines: addLines('000100') },
-                '100110': { name: '随', chinese: '随', description: '元亨利贞，无咎。', text: '元亨利贞无咎', lines: addLines('100110') },
-                '011001': { name: '蛊', chinese: '蛊', description: '元亨，利涉大川。', text: '元亨利涉大川', lines: addLines('011001') },
-                '110000': { name: '临', chinese: '临', description: '元亨利贞。', text: '元亨利贞至于八月有凶', lines: addLines('110000') },
-                '000011': { name: '观', chinese: '观', description: '盥而不荐，有孚颙若。', text: '盥而不荐有孚颙若', lines: addLines('000011') },
-                '100101': { name: '噬嗑', chinese: '噬嗑', description: '亨，利用狱。', text: '亨利用狱', lines: addLines('100101') },
-                '101001': { name: '贲', chinese: '贲', description: '亨，小利有攸往。', text: '亨小利有攸往', lines: addLines('101001') },
-                '000001': { name: '剥', chinese: '剥', description: '不利有攸往。', text: '不利有攸往', lines: addLines('000001') },
-                '100000': { name: '复', chinese: '复', description: '亨。出入无疾。', text: '亨出入无疾朋来无咎', lines: addLines('100000') },
-                '100111': { name: '无妄', chinese: '无妄', description: '元亨利贞。', text: '元亨利贞其匪正有眚不利有攸往', lines: addLines('100111') },
-                '111001': { name: '大畜', chinese: '大畜', description: '利贞，不家食吉。', text: '利贞不家食吉利涉大川', lines: addLines('111001') },
-                '100001': { name: '颐', chinese: '颐', description: '贞吉。观颐。', text: '贞吉观颐自求口实', lines: addLines('100001') },
-                '011110': { name: '大过', chinese: '大过', description: '栋桡，利有攸往，亨。', text: '栋桡利有攸往亨', lines: addLines('011110') },
-                '010010': { name: '坎', chinese: '坎', description: '习坎，有孚，维心亨。', text: '有孚维心亨行有尚', lines: addLines('010010') },
-                '101101': { name: '离', chinese: '离', description: '利贞，亨。畜牝牛，吉。', text: '利贞亨畜牝牛吉', lines: addLines('101101') },
-                '001110': { name: '咸', chinese: '咸', description: '亨，利贞，取女吉。', text: '亨利贞取女吉', lines: addLines('001110') },
-                '011100': { name: '恒', chinese: '恒', description: '亨，无咎，利贞。', text: '亨无咎利贞利有攸往', lines: addLines('011100') },
-                '001111': { name: '遁', chinese: '遁', description: '亨，小利贞。', text: '亨小利贞', lines: addLines('001111') },
-                '111100': { name: '大壮', chinese: '大壮', description: '利贞。', text: '利贞', lines: addLines('111100') },
-                '000101': { name: '晋', chinese: '晋', description: '康侯用锡马蕃庶。', text: '康侯用锡马蕃庶昼日三接', lines: addLines('000101') },
-                '101000': { name: '明夷', chinese: '明夷', description: '利艰贞。', text: '利艰贞', lines: addLines('101000') },
-                '101011': { name: '家人', chinese: '家人', description: '利女贞。', text: '利女贞', lines: addLines('101011') },
-                '110101': { name: '睽', chinese: '睽', description: '小事吉。', text: '小事吉', lines: addLines('110101') },
-                '001010': { name: '蹇', chinese: '蹇', description: '利西南，不利东北。', text: '利西南不利东北利见大人贞吉', lines: addLines('001010') },
-                '010100': { name: '解', chinese: '解', description: '利西南。', text: '利西南无所往其来复吉', lines: addLines('010100') },
-                '110001': { name: '损', chinese: '损', description: '有孚，元吉。', text: '有孚元吉无咎可贞利有攸往', lines: addLines('110001') },
-                '100011': { name: '益', chinese: '益', description: '利有攸往，利涉大川。', text: '利有攸往利涉大川', lines: addLines('100011') },
-                '111110': { name: '夬', chinese: '夬', description: '扬于王庭。', text: '扬于王庭孚号有厉', lines: addLines('111110') },
-                '011111': { name: '姤', chinese: '姤', description: '女壮，勿用取女。', text: '女壮勿用取女', lines: addLines('011111') },
-                '000110': { name: '萃', chinese: '萃', description: '亨，王假有庙。', text: '亨王假有庙利见大人亨利贞', lines: addLines('000110') },
-                '011000': { name: '升', chinese: '升', description: '元亨，用见大人。', text: '元亨用见大人勿恤南征吉', lines: addLines('011000') },
-                '010110': { name: '困', chinese: '困', description: '亨，贞，大人吉。', text: '亨贞大人吉无咎', lines: addLines('010110') },
-                '011010': { name: '井', chinese: '井', description: '改邑不改井。', text: '改邑不改井无丧无得往来井井', lines: addLines('011010') },
-                '101110': { name: '革', chinese: '革', description: '己日乃孚，元亨利贞。', text: '己日乃孚元亨利贞悔亡', lines: addLines('101110') },
-                '011101': { name: '鼎', chinese: '鼎', description: '元吉，亨。', text: '元吉亨', lines: addLines('011101') },
-                '100100': { name: '震', chinese: '震', description: '亨。震来虩虩。', text: '亨震来虩虩笑言哑哑', lines: addLines('100100') },
-                '001001': { name: '艮', chinese: '艮', description: '艮其背，不获其身。', text: '艮其背不获其身行其庭不见其人无咎', lines: addLines('001001') },
-                '001011': { name: '渐', chinese: '渐', description: '女归吉，利贞。', text: '女归吉利贞', lines: addLines('001011') },
-                '110100': { name: '归妹', chinese: '归妹', description: '征凶，无攸利。', text: '征凶无攸利', lines: addLines('110100') },
-                '101100': { name: '丰', chinese: '丰', description: '亨，王假之。', text: '亨王假之勿忧宜日中', lines: addLines('101100') },
-                '001101': { name: '旅', chinese: '旅', description: '小亨，旅贞吉。', text: '小亨旅贞吉', lines: addLines('001101') },
-                '011011': { name: '巽', chinese: '巽', description: '小亨，利有攸往。', text: '小亨利有攸往利见大人', lines: addLines('011011') },
-                '110110': { name: '兑', chinese: '兑', description: '亨，利贞。', text: '亨利贞', lines: addLines('110110') },
-                '010011': { name: '涣', chinese: '涣', description: '亨。王假有庙。', text: '亨王假有庙利涉大川利贞', lines: addLines('010011') },
-                '110010': { name: '节', chinese: '节', description: '亨。苦节不可贞。', text: '亨苦节不可贞', lines: addLines('110010') },
-                '110011': { name: '中孚', chinese: '中孚', description: '豚鱼吉，利涉大川。', text: '豚鱼吉利涉大川利贞', lines: addLines('110011') },
-                '001100': { name: '小过', chinese: '小过', description: '亨，利贞。', text: '亨利贞可小事不可大事', lines: addLines('001100') },
-                '101010': { name: '既济', chinese: '既济', description: '亨小，利贞。', text: '亨小利贞初吉终乱', lines: addLines('101010') },
-                '010101': { name: '未济', chinese: '未济', description: '亨，小狐汔济。', text: '亨小狐汔济濡其尾无攸利', lines: addLines('010101') }
+                '111111': { name: '乾', chinese: '乾', description: '元亨利贞。刚健中正，自强不息。', text: '元亨利贞', index: 1, lines: addLines('111111') },
+                '000000': { name: '坤', chinese: '坤', description: '元亨，利牝马之贞。柔顺承载，厚德载物。', text: '元亨利牝马之贞', index: 2, lines: addLines('000000') },
+                '100010': { name: '屯', chinese: '屯', description: '元亨利贞，勿用有攸往，利建侯。', text: '元亨利贞勿用有攸往利建侯', index: 3, lines: addLines('100010') },
+                '010001': { name: '蒙', chinese: '蒙', description: '亨。匪我求童蒙，童蒙求我。', text: '亨匪我求童蒙童蒙求我', index: 4, lines: addLines('010001') },
+                '111010': { name: '需', chinese: '需', description: '有孚，光亨，贞吉，利涉大川。', text: '有孚光亨贞吉利涉大川', index: 5, lines: addLines('111010') },
+                '010111': { name: '讼', chinese: '讼', description: '有孚，窒惕，中吉，终凶。', text: '有孚窒惕中吉终凶', index: 6, lines: addLines('010111') },
+                '010000': { name: '师', chinese: '师', description: '贞，丈人吉，无咎。', text: '贞丈人吉无咎', index: 7, lines: addLines('010000') },
+                '000010': { name: '比', chinese: '比', description: '吉。原筮，元永贞，无咎。', text: '吉原筮元永贞无咎', index: 8, lines: addLines('000010') },
+                '111011': { name: '小畜', chinese: '小畜', description: '亨。密云不雨。', text: '亨密云不雨自我西郊', index: 9, lines: addLines('111011') },
+                '110111': { name: '履', chinese: '履', description: '履虎尾，不咥人，亨。', text: '履虎尾不咥人亨', index: 10, lines: addLines('110111') },
+                '111000': { name: '泰', chinese: '泰', description: '小往大来，吉亨。', text: '小往大来吉亨', index: 11, lines: addLines('111000') },
+                '000111': { name: '否', chinese: '否', description: '否之匪人，不利君子贞。', text: '否之匪人不利君子贞大往小来', index: 12, lines: addLines('000111') },
+                '101111': { name: '同人', chinese: '同人', description: '同人于野，亨。', text: '同人于野亨利涉大川利君子贞', index: 13, lines: addLines('101111') },
+                '111101': { name: '大有', chinese: '大有', description: '元亨。', text: '元亨', index: 14, lines: addLines('111101') },
+                '001000': { name: '谦', chinese: '谦', description: '亨，君子有终。', text: '亨君子有终', index: 15, lines: addLines('001000') },
+                '000100': { name: '豫', chinese: '豫', description: '利建侯行师。', text: '利建侯行师', index: 16, lines: addLines('000100') },
+                '100110': { name: '随', chinese: '随', description: '元亨利贞，无咎。', text: '元亨利贞无咎', index: 17, lines: addLines('100110') },
+                '011001': { name: '蛊', chinese: '蛊', description: '元亨，利涉大川。', text: '元亨利涉大川', index: 18, lines: addLines('011001') },
+                '110000': { name: '临', chinese: '临', description: '元亨利贞。', text: '元亨利贞至于八月有凶', index: 19, lines: addLines('110000') },
+                '000011': { name: '观', chinese: '观', description: '盥而不荐，有孚颙若。', text: '盥而不荐有孚颙若', index: 20, lines: addLines('000011') },
+                '100101': { name: '噬嗑', chinese: '噬嗑', description: '亨，利用狱。', text: '亨利用狱', index: 21, lines: addLines('100101') },
+                '101001': { name: '贲', chinese: '贲', description: '亨，小利有攸往。', text: '亨小利有攸往', index: 22, lines: addLines('101001') },
+                '000001': { name: '剥', chinese: '剥', description: '不利有攸往。', text: '不利有攸往', index: 23, lines: addLines('000001') },
+                '100000': { name: '复', chinese: '复', description: '亨。出入无疾。', text: '亨出入无疾朋来无咎', index: 24, lines: addLines('100000') },
+                '100111': { name: '无妄', chinese: '无妄', description: '元亨利贞。', text: '元亨利贞其匪正有眚不利有攸往', index: 25, lines: addLines('100111') },
+                '111001': { name: '大畜', chinese: '大畜', description: '利贞，不家食吉。', text: '利贞不家食吉利涉大川', index: 26, lines: addLines('111001') },
+                '100001': { name: '颐', chinese: '颐', description: '贞吉。观颐。', text: '贞吉观颐自求口实', index: 27, lines: addLines('100001') },
+                '011110': { name: '大过', chinese: '大过', description: '栋桡，利有攸往，亨。', text: '栋桡利有攸往亨', index: 28, lines: addLines('011110') },
+                '010010': { name: '坎', chinese: '坎', description: '习坎，有孚，维心亨。', text: '有孚维心亨行有尚', index: 29, lines: addLines('010010') },
+                '101101': { name: '离', chinese: '离', description: '利贞，亨。畜牝牛，吉。', text: '利贞亨畜牝牛吉', index: 30, lines: addLines('101101') },
+                '001110': { name: '咸', chinese: '咸', description: '亨，利贞，取女吉。', text: '亨利贞取女吉', index: 31, lines: addLines('001110') },
+                '011100': { name: '恒', chinese: '恒', description: '亨，无咎，利贞。', text: '亨无咎利贞利有攸往', index: 32, lines: addLines('011100') },
+                '001111': { name: '遁', chinese: '遁', description: '亨，小利贞。', text: '亨小利贞', index: 33, lines: addLines('001111') },
+                '111100': { name: '大壮', chinese: '大壮', description: '利贞。', text: '利贞', index: 34, lines: addLines('111100') },
+                '000101': { name: '晋', chinese: '晋', description: '康侯用锡马蕃庶。', text: '康侯用锡马蕃庶昼日三接', index: 35, lines: addLines('000101') },
+                '101000': { name: '明夷', chinese: '明夷', description: '利艰贞。', text: '利艰贞', index: 36, lines: addLines('101000') },
+                '101011': { name: '家人', chinese: '家人', description: '利女贞。', text: '利女贞', index: 37, lines: addLines('101011') },
+                '110101': { name: '睽', chinese: '睽', description: '小事吉。', text: '小事吉', index: 38, lines: addLines('110101') },
+                '001010': { name: '蹇', chinese: '蹇', description: '利西南，不利东北。', text: '利西南不利东北利见大人贞吉', index: 39, lines: addLines('001010') },
+                '010100': { name: '解', chinese: '解', description: '利西南。', text: '利西南无所往其来复吉', index: 40, lines: addLines('010100') },
+                '110001': { name: '损', chinese: '损', description: '有孚，元吉。', text: '有孚元吉无咎可贞利有攸往', index: 41, lines: addLines('110001') },
+                '100011': { name: '益', chinese: '益', description: '利有攸往，利涉大川。', text: '利有攸往利涉大川', index: 42, lines: addLines('100011') },
+                '111110': { name: '夬', chinese: '夬', description: '扬于王庭。', text: '扬于王庭孚号有厉', index: 43, lines: addLines('111110') },
+                '011111': { name: '姤', chinese: '姤', description: '女壮，勿用取女。', text: '女壮勿用取女', index: 44, lines: addLines('011111') },
+                '000110': { name: '萃', chinese: '萃', description: '亨，王假有庙。', text: '亨王假有庙利见大人亨利贞', index: 45, lines: addLines('000110') },
+                '011000': { name: '升', chinese: '升', description: '元亨，用见大人。', text: '元亨用见大人勿恤南征吉', index: 46, lines: addLines('011000') },
+                '010110': { name: '困', chinese: '困', description: '亨，贞，大人吉。', text: '亨贞大人吉无咎', index: 47, lines: addLines('010110') },
+                '011010': { name: '井', chinese: '井', description: '改邑不改井。', text: '改邑不改井无丧无得往来井井', index: 48, lines: addLines('011010') },
+                '101110': { name: '革', chinese: '革', description: '己日乃孚，元亨利贞。', text: '己日乃孚元亨利贞悔亡', index: 49, lines: addLines('101110') },
+                '011101': { name: '鼎', chinese: '鼎', description: '元吉，亨。', text: '元吉亨', index: 50, lines: addLines('011101') },
+                '100100': { name: '震', chinese: '震', description: '亨。震来虩虩。', text: '亨震来虩虩笑言哑哑', index: 51, lines: addLines('100100') },
+                '001001': { name: '艮', chinese: '艮', description: '艮其背，不获其身。', text: '艮其背不获其身行其庭不见其人无咎', index: 52, lines: addLines('001001') },
+                '001011': { name: '渐', chinese: '渐', description: '女归吉，利贞。', text: '女归吉利贞', index: 53, lines: addLines('001011') },
+                '110100': { name: '归妹', chinese: '归妹', description: '征凶，无攸利。', text: '征凶无攸利', index: 54, lines: addLines('110100') },
+                '101100': { name: '丰', chinese: '丰', description: '亨，王假之。', text: '亨王假之勿忧宜日中', index: 55, lines: addLines('101100') },
+                '001101': { name: '旅', chinese: '旅', description: '小亨，旅贞吉。', text: '小亨旅贞吉', index: 56, lines: addLines('001101') },
+                '011011': { name: '巽', chinese: '巽', description: '小亨，利有攸往。', text: '小亨利有攸往利见大人', index: 57, lines: addLines('011011') },
+                '110110': { name: '兑', chinese: '兑', description: '亨，利贞。', text: '亨利贞', index: 58, lines: addLines('110110') },
+                '010011': { name: '涣', chinese: '涣', description: '亨。王假有庙。', text: '亨王假有庙利涉大川利贞', index: 59, lines: addLines('010011') },
+                '110010': { name: '节', chinese: '节', description: '亨。苦节不可贞。', text: '亨苦节不可贞', index: 60, lines: addLines('110010') },
+                '110011': { name: '中孚', chinese: '中孚', description: '豚鱼吉，利涉大川。', text: '豚鱼吉利涉大川利贞', index: 61, lines: addLines('110011') },
+                '001100': { name: '小过', chinese: '小过', description: '亨，利贞。', text: '亨利贞可小事不可大事', index: 62, lines: addLines('001100') },
+                '101010': { name: '既济', chinese: '既济', description: '亨小，利贞。', text: '亨小利贞初吉终乱', index: 63, lines: addLines('101010') },
+                '010101': { name: '未济', chinese: '未济', description: '亨，小狐汔济。', text: '亨小狐汔济濡其尾无攸利', index: 64, lines: addLines('010101') }
             };
         }
 
@@ -1308,6 +1321,25 @@
             resultDiv.innerHTML = interpretationHTML;
             divinationArea.appendChild(resultDiv);
 
+            // 添加周易Pro跳转按钮（如果有变卦）
+            if (interpretation.changingCount > 0 && changedHex) {
+                const originalIndex = interpretation.original.index;
+                const changedIndex = changedHex.index;
+
+                if (originalIndex && changedIndex) {
+                    const zhouyiButton = document.createElement('button');
+                    zhouyiButton.className = 'ai-button';
+                    zhouyiButton.textContent = `📖 查看周易详解（${interpretation.original.name}之${changedHex.name}）`;
+                    zhouyiButton.style.display = 'block';
+                    zhouyiButton.style.marginBottom = '10px';
+                    zhouyiButton.onclick = () => {
+                        const url = `https://zhouyipro.com/gua${originalIndex}-${changedIndex}.html`;
+                        window.open(url, '_blank');
+                    };
+                    divinationArea.appendChild(zhouyiButton);
+                }
+            }
+
             // 添加AI分析按钮
             const aiButton = document.createElement('button');
             aiButton.className = 'ai-button';
@@ -1351,6 +1383,82 @@
             }
 
             readingInfo += `断卦方法：${interpretation.method}\n\n`;
+
+            // 根据断卦方法添加对应的爻辞详情
+            if (interpretation.changingCount === 0) {
+                // 六爻安静，无需添加爻辞
+            } else if (interpretation.changingCount === 1) {
+                // 一爻动：本卦动爻爻辞
+                const lineIdx = changingLines[0];
+                const lineData = interpretation.original.lines?.[lineIdx];
+                readingInfo += `本卦【${interpretation.original.name}】动爻爻辞：\n`;
+                readingInfo += `第${lineIdx + 1}爻（动）：${lineData?.text || ''}\n`;
+                if (lineData?.xiang) {
+                    readingInfo += `  小象：${lineData.xiang}\n`;
+                }
+                readingInfo += `\n`;
+            } else if (interpretation.changingCount === 2) {
+                // 二爻动：本卦两动爻爻辞，上爻为主
+                const upperLine = Math.max(...changingLines);
+                const lowerLine = Math.min(...changingLines);
+                const upperData = interpretation.original.lines?.[upperLine];
+                const lowerData = interpretation.original.lines?.[lowerLine];
+
+                readingInfo += `本卦【${interpretation.original.name}】动爻爻辞（以上爻为主）：\n`;
+                readingInfo += `第${upperLine + 1}爻（动，上爻为主）：${upperData?.text || ''}\n`;
+                if (upperData?.xiang) {
+                    readingInfo += `  小象：${upperData.xiang}\n`;
+                }
+                readingInfo += `第${lowerLine + 1}爻（动）：${lowerData?.text || ''}\n`;
+                if (lowerData?.xiang) {
+                    readingInfo += `  小象：${lowerData.xiang}\n`;
+                }
+                readingInfo += `\n`;
+            } else if (interpretation.changingCount === 3) {
+                // 三爻动：以本卦和变卦的卦辞判断，本卦为主
+                readingInfo += `本卦为主，变卦为辅，主要参考卦辞进行判断\n\n`;
+            } else if (interpretation.changingCount === 4) {
+                // 四爻动：变卦二静爻爻辞，以下爻为主
+                const staticLines = [0, 1, 2, 3, 4, 5].filter(i => !changingLines.includes(i));
+                const lowerStatic = Math.min(...staticLines);
+                const upperStatic = Math.max(...staticLines);
+                const lowerData = interpretation.changed?.lines?.[lowerStatic];
+                const upperData = interpretation.changed?.lines?.[upperStatic];
+
+                readingInfo += `变卦【${interpretation.changed?.name}】静爻爻辞（以下爻为主）：\n`;
+                readingInfo += `第${lowerStatic + 1}爻（静，下爻为主）：${lowerData?.text || ''}\n`;
+                if (lowerData?.xiang) {
+                    readingInfo += `  小象：${lowerData.xiang}\n`;
+                }
+                readingInfo += `第${upperStatic + 1}爻（静）：${upperData?.text || ''}\n`;
+                if (upperData?.xiang) {
+                    readingInfo += `  小象：${upperData.xiang}\n`;
+                }
+                readingInfo += `\n`;
+            } else if (interpretation.changingCount === 5) {
+                // 五爻动：变卦静爻爻辞
+                const staticLine = [0, 1, 2, 3, 4, 5].find(i => !changingLines.includes(i));
+                const lineData = interpretation.changed?.lines?.[staticLine];
+
+                readingInfo += `变卦【${interpretation.changed?.name}】静爻爻辞：\n`;
+                readingInfo += `第${staticLine + 1}爻（静）：${lineData?.text || ''}\n`;
+                if (lineData?.xiang) {
+                    readingInfo += `  小象：${lineData.xiang}\n`;
+                }
+                readingInfo += `\n`;
+            } else {
+                // 六爻全动：以变卦卦辞判断
+                const original = divination.lines.map(l => l.line.value).join('');
+                if (original === '111111') {
+                    readingInfo += `特殊情况：乾卦六爻全动\n`;
+                    readingInfo += `用九：群龙无首，吉\n\n`;
+                } else if (original === '000000') {
+                    readingInfo += `特殊情况：坤卦六爻全动\n`;
+                    readingInfo += `用六：利永贞\n\n`;
+                } else {
+                    readingInfo += `六爻全动，以变卦卦辞判断\n\n`;
+                }
+            }
 
             // 添加六爻详情
             readingInfo += `六爻详情（自下而上）：\n`;
