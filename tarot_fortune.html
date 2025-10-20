@@ -937,7 +937,7 @@
 
         function toggleCardSelection(index, cardBack, positionLabel) {
             const spread = SPREADS[selectedSpread];
-            const cardIndex = selectedCards.findIndex(c => c.index === index);
+            const cardIndex = selectedCards.findIndex(c => c !== null && c.index === index);
 
             // 获取原始位置数据
             const baseX = parseFloat(cardBack.dataset.baseX);
@@ -946,8 +946,8 @@
             const baseZ = parseFloat(cardBack.dataset.baseZ);
 
             if (cardIndex !== -1) {
-                // 取消选择 - 恢复原位
-                selectedCards.splice(cardIndex, 1);
+                // 取消选择 - 保留位置槽,只移除卡牌
+                selectedCards[cardIndex] = null; // 用null占位,保持位置
                 cardBack.classList.remove('selected');
                 positionLabel.classList.remove('visible');
                 positionLabel.textContent = '';
@@ -956,15 +956,22 @@
                 cardBack.style.transform = `translate(${baseX}px, ${baseY}px) rotate(${angle}deg)`;
                 cardBack.style.zIndex = baseZ;
             } else {
-                // 检查是否已达上限
-                if (selectedCards.length >= spread.count) {
-                    alert(`请只选择 ${spread.count} 张牌！`);
-                    return;
+                // 找到第一个空位
+                let emptySlotIndex = selectedCards.findIndex(c => c === null);
+
+                // 如果没有空位,检查是否已达上限
+                if (emptySlotIndex === -1) {
+                    if (selectedCards.length >= spread.count) {
+                        alert(`请只选择 ${spread.count} 张牌！`);
+                        return;
+                    }
+                    // 添加到末尾
+                    emptySlotIndex = selectedCards.length;
                 }
 
-                // 添加选择 - 沿径向拉出
-                const position = spread.positions[selectedCards.length];
-                selectedCards.push({ index, position });
+                // 添加选择 - 填入第一个空位
+                const position = spread.positions[emptySlotIndex];
+                selectedCards[emptySlotIndex] = { index, position };
                 cardBack.classList.add('selected');
 
                 // 显示位置标签
@@ -998,24 +1005,27 @@
                 positionLabel.style.top = `${labelY}px`;
             }
 
-            // 更新计数
+            // 更新计数 - 计算非null的数量
+            const actualCount = selectedCards.filter(c => c !== null).length;
             const selectionCount = document.getElementById('selectionCount');
-            selectionCount.textContent = `已选: ${selectedCards.length} / ${spread.count}`;
+            selectionCount.textContent = `已选: ${actualCount} / ${spread.count}`;
 
-            // 更新确认按钮
-            document.getElementById('confirmButton').disabled = selectedCards.length !== spread.count;
+            // 更新确认按钮 - 需要所有位置都填满
+            document.getElementById('confirmButton').disabled = actualCount !== spread.count;
         }
 
         function confirmSelection() {
             const spread = SPREADS[selectedSpread];
 
-            // 生成抽取的牌
-            drawnCards = selectedCards.map(({ index, position }) => {
-                const card = { ...shuffledDeck[index] };
-                card.isReversed = Math.random() < 0.5;
-                card.position = position;
-                return card;
-            });
+            // 生成抽取的牌 - 过滤掉null值
+            drawnCards = selectedCards
+                .filter(card => card !== null)
+                .map(({ index, position }) => {
+                    const card = { ...shuffledDeck[index] };
+                    card.isReversed = Math.random() < 0.5;
+                    card.position = position;
+                    return card;
+                });
 
             // 显示结果
             document.getElementById('cardSelectionArea').style.display = 'none';
