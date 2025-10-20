@@ -516,12 +516,25 @@
             }
 
             .card-back {
-                width: 90px;
-                height: 140px;
+                width: 45px;
+                height: 70px;
             }
 
             .card-back::before {
-                font-size: 2.5em;
+                font-size: 1.3em;
+            }
+
+            .card-back.selected::after {
+                width: 16px;
+                height: 16px;
+                font-size: 0.85em;
+                top: 2px;
+                right: 2px;
+            }
+
+            .card-position-label {
+                font-size: 0.75em;
+                padding: 4px 8px;
             }
 
             .tarot-card {
@@ -842,11 +855,16 @@
                 const startAngle = -maxAngle / 2;
                 const angle = startAngle + (index * angleStep);
 
+                // 根据屏幕宽度调整扇形半径和偏移
+                const isMobile = window.innerWidth <= 768;
+                const radius = isMobile ? 180 : 600; // 移动设备使用更小的半径 (从250减到180)
+                const offsetX = isMobile ? -20 : -70; // 移动设备减小左偏移
+                const offsetY = isMobile ? 30 : 90; // 移动设备减小下偏移
+
                 // 计算水平偏移（形成弧形）
-                const radius = 600; // 扇形半径扩大到两倍
                 const radians = (angle * Math.PI) / 180;
-                const x = Math.sin(radians) * radius - 70; // 左移50px
-                const y = -Math.cos(radians) * radius + radius + 90; // 下移50px（从-200调整到-150）
+                const x = Math.sin(radians) * radius + offsetX;
+                const y = -Math.cos(radians) * radius + radius + offsetY;
 
                 // 计算卡牌的层叠顺序（中间的卡牌在上层）
                 const centerDistance = Math.abs(index - totalCards / 2);
@@ -879,8 +897,11 @@
                     const currentBaseX = parseFloat(this.dataset.baseX);
                     const currentBaseY = parseFloat(this.dataset.baseY);
 
+                    // 根据设备类型调整hover距离
+                    const isMobile = window.innerWidth <= 768;
+                    const hoverDistance = isMobile ? 15 : 40; // 移动设备进一步减小hover拉出距离
+
                     // 计算径向hover移动
-                    const hoverDistance = 40; // hover时拉出距离
                     const rad = (currentAngle * Math.PI) / 180;
                     const hoverX = Math.sin(rad) * hoverDistance;
                     const hoverY = -Math.cos(rad) * hoverDistance;
@@ -888,7 +909,8 @@
                     const newX = currentBaseX + hoverX;
                     const newY = currentBaseY + hoverY;
 
-                    this.style.transform = `translate(${newX}px, ${newY}px) rotate(${currentAngle}deg) scale(1.15)`;
+                    const scale = isMobile ? 1.1 : 1.15; // 移动设备减小放大比例
+                    this.style.transform = `translate(${newX}px, ${newY}px) rotate(${currentAngle}deg) scale(${scale})`;
                 });
 
                 cardBack.addEventListener('mouseleave', function() {
@@ -949,8 +971,13 @@
                 positionLabel.textContent = `【${position}】`;
                 positionLabel.classList.add('visible');
 
+                // 根据设备类型调整拉出距离
+                const isMobile = window.innerWidth <= 768;
+                const pullDistance = isMobile ? 20 : 60; // 移动设备进一步减小拉出距离
+                const labelDistance = isMobile ? 50 : 140; // 移动设备进一步减小标签距离
+                const scale = isMobile ? 1.05 : 1.1; // 移动设备减小放大比例
+
                 // 计算径向拉出的位置（沿着角度方向向外拉）
-                const pullDistance = 60; // 拉出距离
                 const radians = (angle * Math.PI) / 180;
                 const pullX = Math.sin(radians) * pullDistance;
                 const pullY = -Math.cos(radians) * pullDistance;
@@ -959,11 +986,10 @@
                 const newY = baseY + pullY;
 
                 // 应用新位置并提升层级
-                cardBack.style.transform = `translate(${newX}px, ${newY}px) rotate(${angle}deg) scale(1.1)`;
+                cardBack.style.transform = `translate(${newX}px, ${newY}px) rotate(${angle}deg) scale(${scale})`;
                 cardBack.style.zIndex = 500; // 选中的卡牌层级最高
 
                 // 计算标签的径向位置（在卡牌拉出位置的更外侧）
-                const labelDistance = 140; // 标签距离中心的距离（比卡牌拉出距离更远）
                 const labelX = baseX + Math.sin(radians) * labelDistance;
                 const labelY = baseY + (-Math.cos(radians) * labelDistance);
 
